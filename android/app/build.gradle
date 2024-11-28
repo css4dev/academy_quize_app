@@ -18,7 +18,14 @@ android {
     kotlinOptions {
         jvmTarget = JavaVersion.VERSION_1_8
     }
-
+    signingConfigs {
+        release {
+            keyAlias 'keyAlias'
+            keyPassword '123456'
+            storeFile file('android/app/jks.jks')
+            storePassword '123456'
+        }
+    }
     defaultConfig {
         // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
         applicationId = "com.sawaaid.academy_quize_app.academy_quize_app"

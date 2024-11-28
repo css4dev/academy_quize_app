@@ -4,10 +4,12 @@ import 'quiz_list_screen.dart';
 import 'login.dart';  // Import your login screen
 
 void main() {
-  runApp(QuestionApp());
+  runApp(const QuestionApp());
 }
 
 class QuestionApp extends StatelessWidget {
+  const QuestionApp({super.key});
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -17,7 +19,7 @@ class QuestionApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSwatch().copyWith(
           secondary: Colors.orange,
         ),
-        textTheme: TextTheme(
+        textTheme: const TextTheme(
           bodyMedium: TextStyle(fontSize: 18),
           bodyLarge: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
         ),

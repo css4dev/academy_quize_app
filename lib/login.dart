@@ -84,7 +84,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 end: Alignment.bottomCenter,
               ),
             ),
-            child: Center(
+            child: const Center(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -124,23 +124,23 @@ class _LoginScreenState extends State<LoginScreen> {
                           ),
                           child: Text(
                             _errorMessage!,
-                            style: TextStyle(
+                            style: const TextStyle(
                               color: AppColors.errorColor,
                               fontSize: AppFontSizes.medium,
                             ),
                             textAlign: TextAlign.center,
                           ),
                         ),
-                      SizedBox(height: 20),
+                      const SizedBox(height: 20),
                       // حقل البريد الإلكتروني
                       TextFormField(
                         controller: _emailController,
                         decoration: InputDecoration(
                           labelText: 'البريد الإلكتروني',
-                          labelStyle: TextStyle(
+                          labelStyle: const TextStyle(
                             color: AppColors.textColor,
                           ),
-                          prefixIcon: Icon(
+                          prefixIcon: const Icon(
                             Icons.email,
                             color: AppColors.primaryColor,
                           ),
@@ -151,7 +151,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             borderSide: BorderSide.none,
                           ),
                           contentPadding:
-                          EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+                          const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
                         ),
                         keyboardType: TextInputType.emailAddress,
                         validator: (value) {
@@ -164,16 +164,16 @@ class _LoginScreenState extends State<LoginScreen> {
                           return null;
                         },
                       ),
-                      SizedBox(height: 20),
+                      const SizedBox(height: 20),
                       // حقل كلمة المرور
                       TextFormField(
                         controller: _passwordController,
                         decoration: InputDecoration(
                           labelText: 'كلمة المرور',
-                          labelStyle: TextStyle(
+                          labelStyle: const TextStyle(
                             color: AppColors.textColor,
                           ),
-                          prefixIcon: Icon(
+                          prefixIcon: const Icon(
                             Icons.lock,
                             color: AppColors.primaryColor,
                           ),
@@ -184,7 +184,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             borderSide: BorderSide.none,
                           ),
                           contentPadding:
-                          EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+                          const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
                         ),
                         obscureText: true,
                         validator: (value) {
@@ -197,7 +197,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           return null;
                         },
                       ),
-                      SizedBox(height: 30),
+                      const SizedBox(height: 30),
                       // زر تسجيل الدخول
                       _isLoading
                           ? CircularProgressIndicator()
@@ -205,13 +205,13 @@ class _LoginScreenState extends State<LoginScreen> {
                         onPressed: _login,
                         style: ElevatedButton.styleFrom(
                           backgroundColor: AppColors.primaryColor,
-                          padding: EdgeInsets.symmetric(
+                          padding: const EdgeInsets.symmetric(
                               horizontal: 50, vertical: 15),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(20),
                           ),
                         ),
-                        child: Text(
+                        child: const Text(
                           'تسجيل الدخول',
                           style: TextStyle(
                             fontSize: AppFontSizes.medium,
@@ -219,13 +219,13 @@ class _LoginScreenState extends State<LoginScreen> {
                           ),
                         ),
                       ),
-                      SizedBox(height: 15),
+                      const SizedBox(height: 15),
                       // زر استعادة كلمة المرور
                       TextButton(
                         onPressed: () {
                           // Handle forgotten password or registration navigation
                         },
-                        child: Text(
+                        child: const Text(
                           'هل نسيت كلمة المرور؟',
                           style: TextStyle(
                             color: AppColors.primaryColor,

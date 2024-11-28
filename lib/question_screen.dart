@@ -10,7 +10,7 @@ import 'api_service.dart';
 class QuestionScreen extends StatefulWidget {
   final int quizId;
 
-  QuestionScreen({required this.quizId});
+  const QuestionScreen({super.key, required this.quizId});
 
   @override
   _QuestionScreenState createState() => _QuestionScreenState();
@@ -66,7 +66,9 @@ class _QuestionScreenState extends State<QuestionScreen> {
         _questions.fold(0, (sum, question) => sum + question.mark);
     _totalMarks=0;
 for(int i=0;i<_userAnswers.length;i++){
-  print(_userAnswers[i].toString()+" "+_questions[i].correctAnswer.toString()+" "+_totalMarks.toString());
+  if (kDebugMode) {
+    print("${_userAnswers[i]} ${_questions[i].correctAnswer} $_totalMarks");
+  }
   if(_userAnswers[i]!+1 ==_questions[i].correctAnswer){
     _totalMarks +=_questions[i].mark;
   }
