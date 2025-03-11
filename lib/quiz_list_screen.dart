@@ -1,5 +1,6 @@
 import 'package:academy_quize_app/account.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'constants.dart';
 import 'question_screen.dart';
 import 'models.dart';
@@ -20,9 +21,16 @@ class _QuizListScreenState extends State<QuizListScreen> {
     super.initState();
     fetchQuizzes();
   }
-
+bool isLoading=true;
+  int userId=0;
   Future<void> fetchQuizzes() async {
+    isLoading=true;
     final quizzes = await ApiService.fetchQuizzes();
+    final prefs = await SharedPreferences.getInstance();
+    // Check if the user is logged in by checking a flag or token
+     userId = prefs.getInt('user_id')! ;
+
+    isLoading=false;
     setState(() {
       _quizzes = quizzes;
     });
@@ -39,16 +47,31 @@ class _QuizListScreenState extends State<QuizListScreen> {
             style: TextStyle(fontSize: AppFontSizes.large),
           ),
           backgroundColor: AppColors.secondaryColor,
-          leading: GestureDetector(
-            onTap: (){
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => AccountPage()),
-              );
-            },
-              child: Icon(Icons.manage_accounts)),
+          leading: Visibility(
+            visible: userId==1,
+            child: GestureDetector(
+              onTap: (){
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => AccountPage()),
+                );
+              },
+                child: Icon(Icons.manage_accounts)),
+          ),
         ),
-        body: ListView.builder(
+        body: isLoading?
+        Center(child: CircularProgressIndicator())
+        :_quizzes.length==0?
+        Center(
+          child: Text(
+            "لا يوجد أي اختبارات",
+            style: const TextStyle(
+              fontSize: AppFontSizes.large,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        )
+        :ListView.builder(
           itemCount: _quizzes.length,
           itemBuilder: (context, index) {
             final quiz = _quizzes[index];

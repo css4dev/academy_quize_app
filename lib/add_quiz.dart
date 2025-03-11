@@ -11,7 +11,7 @@ class _AddQuizScreenState extends State<AddQuizScreen> {
   String title = '';
 
   Future<void> addQuiz() async {
-    final url = Uri.parse('http://sawa-aid.com/quizApp/add_quiz.php');
+    final url = Uri.parse('https://sawa-aid.com/quizApp/add_quiz.php');
     final response = await http.post(url, body: {'title': title});
 
     if (response.statusCode == 200) {

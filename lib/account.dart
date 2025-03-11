@@ -26,55 +26,99 @@ class _AccountPageState extends State<AccountPage> {
   ];
 
   @override
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(_titles[_currentIndex]),
+        title: Text(
+          _titles[_currentIndex],
+          style: TextStyle(fontWeight: FontWeight.bold),
+        ),
+        centerTitle: true,
+        backgroundColor: Colors.teal,
       ),
-      body: _pages[_currentIndex],
+      body: AnimatedSwitcher(
+        duration: Duration(milliseconds: 300),
+        child: _pages[_currentIndex],
+      ),
       drawer: Drawer(
-        child: ListView(
+        child: Column(
           children: [
-            const DrawerHeader(
-              decoration: BoxDecoration(
-                color: Colors.blue,
+            UserAccountsDrawerHeader(
+              accountName: Text(
+                'صلاح أحمد',
+                style: TextStyle(fontWeight: FontWeight.bold),
               ),
-              child: Text(
-                'لوحة التحكم',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 24,
+              accountEmail: Text('example@email.com'),
+              currentAccountPicture: CircleAvatar(
+                backgroundImage: AssetImage('assets/avatar.png'),
+              ),
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  colors: [Colors.teal, Colors.tealAccent],
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
                 ),
               ),
             ),
-            // قائمة الصفحات
-            ListTile(
-              leading: Icon(Icons.people),
-              title: Text('عرض المستخدمين'),
-              onTap: () {
-                setState(() {
-                  _currentIndex = 0;
-                });
-                Navigator.pop(context);
-              },
+            Expanded(
+              child: ListView(
+                children: [
+                  _buildDrawerItem(
+                    context,
+                    icon: Icons.people,
+                    text: 'عرض المستخدمين',
+                    index: 0,
+                  ),
+                  Divider(),
+                  _buildDrawerItem(
+                    context,
+                    icon: Icons.quiz,
+                    text: 'عرض الاختبارات',
+                    index: 1,
+                  ),
+                ],
+              ),
             ),
-
-            Divider(),
-            ListTile(
-              leading: Icon(Icons.quiz),
-              title: Text('عرض الاختبارات'),
-              onTap: () {
-                setState(() {
-                  _currentIndex = 1;
-                });
-                Navigator.pop(context);
-              },
-            ),
-
-
           ],
         ),
       ),
+      bottomNavigationBar: BottomNavigationBar(
+        currentIndex: _currentIndex,
+        selectedItemColor: Colors.teal,
+        unselectedItemColor: Colors.grey,
+        onTap: (index) {
+          setState(() {
+            _currentIndex = index;
+          });
+        },
+        items: [
+          BottomNavigationBarItem(
+            icon: Icon(Icons.people),
+            label: 'المستخدمين',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.quiz),
+            label: 'الاختبارات',
+          ),
+        ],
+      ),
     );
   }
-}
+
+  Widget _buildDrawerItem(BuildContext context,
+      {required IconData icon, required String text, required int index}) {
+    return ListTile(
+      leading: Icon(icon, color: Colors.teal),
+      title: Text(
+        text,
+        style: TextStyle(fontSize: 18),
+      ),
+      onTap: () {
+        setState(() {
+          _currentIndex = index;
+        });
+        Navigator.pop(context);
+      },
+    );
+  }}

@@ -25,7 +25,7 @@ class QuestionApp extends StatelessWidget {
         ),
       ),
       routes: {
-        '/quizList': (context) => QuizListScreen(),
+        '/quizList': (context) => const QuizListScreen(),
       },
       home: FutureBuilder<bool>(
         future: _checkLoginStatus(),
@@ -41,7 +41,7 @@ class QuestionApp extends StatelessWidget {
             );
           }
           if (snapshot.hasData && snapshot.data == true) {
-            return Directionality(
+            return const Directionality(
               textDirection: TextDirection.rtl,
               child: QuizListScreen(),
             );

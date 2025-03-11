@@ -6,6 +6,8 @@ import 'add_question.dart';
 import 'edit_question.dart';
 
 class QuizQuestionsScreen extends StatefulWidget {
+  final quizId;
+  const QuizQuestionsScreen(this.quizId);
   @override
   _QuizQuestionsScreenState createState() => _QuizQuestionsScreenState();
 }
@@ -21,7 +23,7 @@ class _QuizQuestionsScreenState extends State<QuizQuestionsScreen> {
 
   // استرجاع الأسئلة من الخادم
   Future<void> _fetchQuestions() async {
-    final response = await http.get(Uri.parse('http://your-server-path/get_questions.php?quiz_id=1'));
+    final response = await http.get(Uri.parse('https://sawa-aid.com/quizApp/get_questions.php?quiz_id=${widget.quizId}'));
 
     if (response.statusCode == 200) {
       setState(() {
@@ -61,7 +63,7 @@ class _QuizQuestionsScreenState extends State<QuizQuestionsScreen> {
           // التوجه إلى شاشة إضافة سؤال
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => AddQuestionScreen(quizId: 1,)),
+            MaterialPageRoute(builder: (context) => AddQuestionScreen(quizId: widget.quizId,)),
           );
         },
         child: Icon(Icons.add),

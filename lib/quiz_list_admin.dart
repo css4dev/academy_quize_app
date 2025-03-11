@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:academy_quize_app/qustions_admin.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
@@ -22,7 +23,7 @@ class _QuizListAdminScreenState extends State<QuizListAdminScreen> {
 
   // دالة لجلب البيانات من API
   Future<void> fetchQuizzes() async {
-    final url = Uri.parse('http://sawa-aid.com/quizApp/get_quizzes_admin.php');
+    final url = Uri.parse('https://sawa-aid.com/quizApp/get_quizzes_admin.php');
     final response = await http.get(url);
 
     if (response.statusCode == 200) {
@@ -63,22 +64,34 @@ class _QuizListAdminScreenState extends State<QuizListAdminScreen> {
         itemCount: quizzes.length,
         itemBuilder: (context, index) {
           final quiz = quizzes[index];
-          return ListTile(
-            title: Text(quiz['title']),
-            subtitle: Text(quiz['created_at']),
-            trailing: IconButton(
-              icon: Icon(Icons.edit),
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => EditQuizScreen(
-                      quizId: quiz['id'],
-                      initialTitle: quiz['title'],
-                    ),
+          return GestureDetector(
+            onTap: (){
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => QuizQuestionsScreen(
+                      quiz['id']
                   ),
-                ).then((_) => fetchQuizzes());
-              },
+                ),
+              );
+            },
+            child: ListTile(
+              title: Text(quiz['title']),
+              subtitle: Text(quiz['created_at']),
+              trailing: IconButton(
+                icon: Icon(Icons.edit),
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => EditQuizScreen(
+                        quizId: quiz['id'],
+                        initialTitle: quiz['title'],
+                      ),
+                    ),
+                  ).then((_) => fetchQuizzes());
+                },
+              ),
             ),
           );
         },

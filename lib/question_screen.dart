@@ -130,9 +130,9 @@ for(int i=0;i<_userAnswers.length;i++){
           body: _questions.isEmpty
               ? const Center(child: CircularProgressIndicator())
               : SingleChildScrollView(
-                child: Padding(
-                          padding: const EdgeInsets.all(16.0),
-                          child: Column(
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
                 children: [
                   // Progress indicator
                   LinearProgressIndicator(
@@ -141,7 +141,7 @@ for(int i=0;i<_userAnswers.length;i++){
                     color: Colors.indigo,
                   ),
                   const SizedBox(height: 20),
-                
+
                   // Question card
                   Card(
                     elevation: 5,
@@ -175,12 +175,12 @@ for(int i=0;i<_userAnswers.length;i++){
                       ),
                     ),
                   ),
-                
+
                   const SizedBox(height: 20),
-                
+
                   // Answer options
                   ListView.builder(
-                  shrinkWrap: true,
+                    shrinkWrap: true,
                     physics: NeverScrollableScrollPhysics(),
                     itemCount:
                     _questions[_currentQuestionIndex].answers.length,
@@ -211,9 +211,9 @@ for(int i=0;i<_userAnswers.length;i++){
                       );
                     },
                   ),
-                
+
                   const SizedBox(height: 20),
-                
+
                   // Navigation buttons
                   Row(
                     children: [
@@ -233,7 +233,7 @@ for(int i=0;i<_userAnswers.length;i++){
                           ),
                         ),
                       const Spacer(),
-                      if (_currentQuestionIndex < _questions.length - 1)
+                      if (_currentQuestionIndex < _userAnswers.length - 1 )
                         ElevatedButton.icon(
                           onPressed: _selectedAnswer != null
                               ? _goToNextQuestion
@@ -247,9 +247,9 @@ for(int i=0;i<_userAnswers.length;i++){
                         ),
                     ],
                   ),
-                
+
                   const SizedBox(height: 20),
-                
+
                   // Show results button if all questions are answered
                   if (allAnswered)
                     Center(
@@ -272,9 +272,9 @@ for(int i=0;i<_userAnswers.length;i++){
                       ),
                     ),
                 ],
-                          ),
-                        ),
               ),
+            ),
+          ),
         ),
       ),
     );
@@ -284,37 +284,63 @@ for(int i=0;i<_userAnswers.length;i++){
     setState(() {
       examEnd = true;
     });
+
     final apiUrl = 'https://sawa-aid.com/quizApp/submit_quize.php';
 
     final List<Map<String, dynamic>> answers = [];
-    int fullMark = 0;  // Initialize full mark
+    int fullMark = 0; // Initialize full mark
 
-    // Calculate the full mark based on correct answers (sum of the marks for correct answers)
+    // حساب العلامة الكاملة بناءً على الإجابات الصحيحة
     for (int i = 0; i < _questions.length; i++) {
       answers.add({
         'question_id': _questions[i].id,
         'answer_num': _userAnswers[i] != null ? _userAnswers[i]! + 1 : null,
       });
 
-      // Add mark for correct answers
+      // جمع العلامات للإجابات الصحيحة
       if (_userAnswers[i] != null &&
           _userAnswers[i]! + 1 == _questions[i].correctAnswer) {
         fullMark += _questions[i].mark;
       }
     }
 
-    final response = await ApiService.submitQuizResults(apiUrl, answers, widget.quizId, fullMark);
+    // 🔹 عرض Progress Dialog أثناء إرسال البيانات
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              CircularProgressIndicator(),
+              SizedBox(height: 16),
+              Text("جاري إرسال الاختبار..."),
+            ],
+          ),
+        );
+      },
+    );
 
-    if (response.statusCode == 200) {
-      final result = jsonDecode(response.body);
-      if (result['success']) {
-        _showResults();
-        _showMessage('تم إرسال الاختبار بنجاح!', isError: false);
+    try {
+      final response = await ApiService.submitQuizResults(apiUrl, answers, widget.quizId, fullMark);
+
+      Navigator.pop(context); // 🔹 إخفاء Progress Dialog بعد استلام الرد
+
+      if (response.statusCode == 200) {
+        final result = jsonDecode(response.body);
+        if (result['success']) {
+          _showResults();
+          _showMessage('تم إرسال الاختبار بنجاح!', isError: false);
+        } else {
+          _showMessage('فشل إرسال الاختبار. حاول مرة أخرى.', isError: true);
+        }
       } else {
-        _showMessage('فشل إرسال الاختبار. حاول مرة أخرى.', isError: true);
+        _showMessage('حدث خطأ أثناء إرسال الاختبار.', isError: true);
       }
-    } else {
-      _showMessage('حدث خطأ أثناء إرسال الاختبار.', isError: true);
+    } catch (e) {
+      Navigator.pop(context); // 🔹 إخفاء Progress Dialog عند حدوث خطأ
+      _showMessage('حدث خطأ أثناء الاتصال بالخادم.', isError: true);
     }
   }
 

@@ -10,6 +10,9 @@ class ApiService {
     // Check if the user is logged in by checking a flag or token
     int? userId = prefs.getInt('user_id') ;
     final response = await http.get(Uri.parse('https://sawa-aid.com/quizApp/get_quizzes.php?user_id=$userId'));
+    if (kDebugMode) {
+      print("${response.body}sssss");
+    }
     if (response.statusCode == 200) {
       if (kDebugMode) {
         print("${response.body}sssss");
@@ -17,7 +20,7 @@ class ApiService {
       final List<dynamic> jsonData = json.decode(response.body);
       return jsonData.map((quiz) => Quiz.fromJson(quiz)).toList();
     } else {
-      throw Exception('فشل تحميل قائمة الاختبارات');
+      throw Exception('فشل تحميل قائمة الاختبارات'+response.body);
     }
   }
 

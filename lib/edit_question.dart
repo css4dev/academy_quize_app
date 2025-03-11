@@ -23,7 +23,7 @@ class _EditQuestionScreenState extends State<EditQuestionScreen> {
   final _markController = TextEditingController();
 
   Future<void> _fetchQuestionDetails() async {
-    final response = await http.get(Uri.parse('http://your-server-path/get_question.php?id=${widget.questionId}'));
+    final response = await http.get(Uri.parse('https://sawa-aid.com/quizApp/get_question.php?id=${widget.questionId}'));
 
     if (response.statusCode == 200) {
       final question = json.decode(response.body);

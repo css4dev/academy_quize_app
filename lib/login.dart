@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'constants.dart';
@@ -29,7 +30,8 @@ class _LoginScreenState extends State<LoginScreen> {
       final password = _passwordController.text;
 
       final response = await http.post(
-        Uri.parse('https://sawa-aid.com/quizApp/login.php'), // Replace with your server's URL
+        Uri.parse(
+            'https://sawa-aid.com/quizApp/login.php'), // Replace with your server's URL
         headers: <String, String>{
           'Content-Type': 'application/json',
         },
@@ -38,14 +40,17 @@ class _LoginScreenState extends State<LoginScreen> {
           'password': password,
         }),
       );
-
+      if (kDebugMode) {
+        print("login: ${response.body}");
+      }
       if (response.statusCode == 200) {
         final responseData = json.decode(response.body);
 
         if (responseData['success']) {
           final prefs = await SharedPreferences.getInstance();
           await prefs.setBool('isLoggedIn', true);
-          await prefs.setInt('user_id', responseData['user_id']); // Save the user ID
+          await prefs.setInt(
+              'user_id', responseData['user_id']); // Save the user ID
 
           setState(() {
             _isLoading = false;
@@ -66,7 +71,6 @@ class _LoginScreenState extends State<LoginScreen> {
       }
     }
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -150,8 +154,8 @@ class _LoginScreenState extends State<LoginScreen> {
                             borderRadius: BorderRadius.circular(12),
                             borderSide: BorderSide.none,
                           ),
-                          contentPadding:
-                          const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+                          contentPadding: const EdgeInsets.symmetric(
+                              horizontal: 20, vertical: 15),
                         ),
                         keyboardType: TextInputType.emailAddress,
                         validator: (value) {
@@ -183,8 +187,8 @@ class _LoginScreenState extends State<LoginScreen> {
                             borderRadius: BorderRadius.circular(12),
                             borderSide: BorderSide.none,
                           ),
-                          contentPadding:
-                          const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+                          contentPadding: const EdgeInsets.symmetric(
+                              horizontal: 20, vertical: 15),
                         ),
                         obscureText: true,
                         validator: (value) {
@@ -202,23 +206,23 @@ class _LoginScreenState extends State<LoginScreen> {
                       _isLoading
                           ? CircularProgressIndicator()
                           : ElevatedButton(
-                        onPressed: _login,
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: AppColors.primaryColor,
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 50, vertical: 15),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(20),
-                          ),
-                        ),
-                        child: const Text(
-                          'تسجيل الدخول',
-                          style: TextStyle(
-                            fontSize: AppFontSizes.medium,
-                            color: Colors.white,
-                          ),
-                        ),
-                      ),
+                              onPressed: _login,
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: AppColors.primaryColor,
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 50, vertical: 15),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(20),
+                                ),
+                              ),
+                              child: const Text(
+                                'تسجيل الدخول',
+                                style: TextStyle(
+                                  fontSize: AppFontSizes.medium,
+                                  color: Colors.white,
+                                ),
+                              ),
+                            ),
                       const SizedBox(height: 15),
                       // زر استعادة كلمة المرور
                       TextButton(
